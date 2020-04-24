@@ -1,0 +1,25 @@
+{
+  "name": "link-shortener",
+  "version": "1.0.0",
+  "description": "Service for shortening links(MERN)",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodw app.js",
+    "server": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MischukRoman/LinkShortener.git"
+  },
+  "keywords": [
+    "MERN",
+    "react",
+    "node.js"
+  ],
+  "author": "Mischuk Roman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MischukRoman/LinkShortener/issues"
+  },
+  "homepage": "https://github.com/MischukRoman/LinkShortener#readme"
+}
