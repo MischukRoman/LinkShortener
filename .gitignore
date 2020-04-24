@@ -1,0 +1,6 @@
+dist
+.idea
+.idea\
+node_modules
+package-lock.json
+.idea/workspace.xml
