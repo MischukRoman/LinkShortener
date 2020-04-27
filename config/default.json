@@ -1,4 +1,5 @@
 {
   "port": 5000,
+  "jwtSecret": "mischuk",
   "mongoUri": "mongodb+srv://mischuk:Roma123@cluster0-cwqsv.azure.mongodb.net/app?retryWrites=true&w=majority"
 }
