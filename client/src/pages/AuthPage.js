@@ -1,21 +1,37 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useHttp} from "../hooks/http.hook";
+import {useMessage} from "../hooks/message.hook";
 
 export const AuthPage = () => {
-
-    const {loading, request} = useHttp();
+    const message = useMessage();
+    const {loading, request, error, clearError} = useHttp();
 
     const [form, setForm] = useState({
         email: '', password: ''
     });
 
+    useEffect(() => {
+        message(error);
+        clearError();
+    }, [error, message, clearError]);
+
     const changeHandler = event => {
         setForm({...form, [event.target.name]: event.target.value})
     };
 
+    const loginHandler = async () => {
+        try {
+            console.log('form: ', form);
+            const data = await request('/api/auth/login', 'POST', {...form});
+            message(data.message);
+        } catch (e){}
+    };
+
     const registerHandler = async () => {
         try {
-            const data = await request('/api/auth/register', 'POST', {...form})
+            console.log('form: ', form);
+            const data = await request('/api/auth/register', 'POST', {...form});
+            message(data.message);
         } catch (e){}
     };
 
@@ -32,8 +48,8 @@ export const AuthPage = () => {
                                 <input
                                     placeholder="Введите email"
                                     id="email"
-                                    type="text"
-                                    name="text"
+                                    type="email"
+                                    name="email"
                                     className="yellow-input"
                                     onChange={changeHandler}
                                 />
@@ -58,7 +74,8 @@ export const AuthPage = () => {
                         <button
                             className="btn yellow darken-4"
                             style={{marginRight: 10}}
-                            disabled={loading}>
+                            disabled={loading}
+                            onClick={loginHandler}>
                                 Войти
                         </button>
                         <button
