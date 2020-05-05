@@ -26,8 +26,6 @@ router.post('/generate',
                 code, to, from, owner: req.user.userId
             });
 
-            await console.log('link:', link);
-
             await link.save();
 
             res.status(201).json({ link })
@@ -54,7 +52,9 @@ router.get('/:id',
     auth,
     async (req, res) => {
         try {
-            const links = await Link.findById(req.params.id); /// ???
+            await console.log('req.params.id:', req.params.id);
+            const links = await Link.findById(req.params.id);
+            await console.log('link:', link);
             res.json(links);
         } catch (e) {
             res.status(500).json({message: 'Что-то пошло не так, попробуйте снова'})
