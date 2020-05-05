@@ -26,6 +26,8 @@ router.post('/generate',
                 code, to, from, owner: req.user.userId
             });
 
+            await console.log('link:', link);
+
             await link.save();
 
             res.status(201).json({ link })
