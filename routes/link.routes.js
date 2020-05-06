@@ -53,9 +53,9 @@ router.get('/:id',
     async (req, res) => {
         try {
             await console.log('req.params.id:', req.params.id);
-            const links = await Link.findById(req.params.id);
+            const link = await Link.findById(req.params.id);
             await console.log('link:', link);
-            res.json(links);
+            res.json(link);
         } catch (e) {
             res.status(500).json({message: 'Что-то пошло не так, попробуйте снова'})
         }
