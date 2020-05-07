@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from 'react';
 import {useHttp} from "../hooks/http.hook";
 import {useMessage} from "../hooks/message.hook";
 import {AuthContext} from "../context/AuthContext";
+import AuthGoogle from "../components/AuthGoogle";
 
 export const AuthPage = () => {
 
@@ -9,6 +10,7 @@ export const AuthPage = () => {
 
     const message = useMessage();
     const {loading, request, error, clearError} = useHttp();
+    /*const googleId = config.get('REACT_APP_GOOGLE_CLIENT_ID');*/
 
     const [form, setForm] = useState({
         email: '', password: ''
@@ -19,9 +21,27 @@ export const AuthPage = () => {
         clearError();
     }, [error, message, clearError]);
 
-    useEffect( () => {
+    useEffect(() => {
         window.M.updateTextFields()
     }, []);
+/*
+
+    useEffect(() => {
+        const _onInit = auth2 => {
+            console.log('init OK', auth2)
+        };
+        const _onError = err => {
+            console.log('error', err)
+        };
+
+        window.gapi.load('auth2', function () {
+            window.gapi.auth2
+                .init({
+                    client_id: googleId,
+                })
+        }).then(_onInit, _onError)
+    }, [googleId]);
+*/
 
     const changeHandler = event => {
         setForm({...form, [event.target.name]: event.target.value})
@@ -33,7 +53,8 @@ export const AuthPage = () => {
             const data = await request('/api/auth/login', 'POST', {...form});
             message(data.message);
             auth.login(data.token, data.userId)
-        } catch (e){}
+        } catch (e) {
+        }
     };
 
     const registerHandler = async () => {
@@ -41,8 +62,32 @@ export const AuthPage = () => {
             console.log('form: ', form);
             const data = await request('/api/auth/register', 'POST', {...form});
             message(data.message);
-        } catch (e){}
+        } catch (e) {
+        }
     };
+
+    /*const loginGoogleHandler = async () => {
+        try {
+            const auth2 = window.gapi.auth2.getAuthInstance();
+            auth2.signIn().then(googleUser => {
+
+                // метод возвращает объект пользователя
+                // где есть все необходимые нам поля
+                const profile = googleUser.getBasicProfile()
+                console.log('ID: ' + profile.getId()) // не посылайте подобную информацию напрямую, на ваш сервер!
+                console.log('Full Name: ' + profile.getName())
+                console.log('Given Name: ' + profile.getGivenName())
+                console.log('Family Name: ' + profile.getFamilyName())
+                console.log('Image URL: ' + profile.getImageUrl())
+                console.log('Email: ' + profile.getEmail())
+
+                // токен
+                const id_token = googleUser.getAuthResponse().id_token
+                console.log('ID Token: ' + id_token)
+            })
+        } catch (e) {
+        }
+    };*/
 
     return (
         <div className="row">
@@ -81,21 +126,34 @@ export const AuthPage = () => {
 
                         </div>
                     </div>
+
                     <div className="card-action">
                         <button
                             className="btn yellow darken-4"
                             style={{marginRight: 10}}
                             disabled={loading}
                             onClick={loginHandler}>
-                                Войти
+                            Войти
                         </button>
+
                         <button
                             className="btn grey lighten-1 black-text"
                             onClick={registerHandler}
                             disabled={loading}>
-                                Регистрация
+                            Регистрация
                         </button>
+
+                        {/*<button
+                            className="btn yellow darken-4"
+                            onClick={loginGoogleHandler}
+                            disabled={loading}>
+                            Войти через Google
+                        </button>
+*/}
                     </div>
+
+                    <AuthGoogle/>
+
                 </div>
             </div>
         </div>
