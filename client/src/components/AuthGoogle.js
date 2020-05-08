@@ -49,8 +49,8 @@ class AuthGoogle extends Component {
         return (
             <div>
                 <header >
-                    <button onClick={this.signIn}>Log in</button>
-                    <button onClick={this.signOut}>Log out</button>
+                    <button onClick={this.signIn}>Войти через Google</button>
+                    {/*<button onClick={this.signOut}>Log out</button>*/}
                 </header>
             </div>
         )
