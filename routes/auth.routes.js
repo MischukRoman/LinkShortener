@@ -46,6 +46,44 @@ router.post(
 );
 
 // /api/auth/login
+
+router.post('/google-login',
+    async (req, res) => {
+        try {
+            const {email, id} = req.body;
+
+            let user = await User.findOne({email});
+
+            if (!user) {
+                // регистрируем, если такого юзера нету
+                /*return res.status(400).json({message: 'Пользователь не найден'});*/
+                const hashedId = await bcrypt.hash(id, 12);
+                const newUser = new User({email, password: hashedId});
+                await newUser.save();
+                user = await User.findOne({email});
+            } else {
+                const isMatch = await bcrypt.compare(id, user.password);
+
+                if (!isMatch) {
+                    return res.status(400).json({message: 'Неверный пароль, попробуйте снова'})
+                }
+            }
+
+            const token = jwt.sign(
+                {userId: user.id},
+                config.get('jwtSecret'),
+                {expiresIn: '1h'}
+            );
+
+            res.json({ token, userId: user.id })
+
+        } catch (e) {
+            res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+        }
+    }
+);
+
+// /api/auth/login
 router.post('/login',
     [
         check('email', 'Введите корректный email').normalizeEmail().isEmail(),
